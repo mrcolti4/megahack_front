@@ -16,9 +16,13 @@ function Login() {
   const { login } = useContext(AuthContext)!;
   const form = useForm({
     onSubmit: (values) => {
-      login(values.value.email, values.value.password).then(() => {
-        navigate({ to: "/about" });
-      });
+      login(values.value.email, values.value.password).then(
+        async (userCreds) => {
+          const token = await userCreds.user.getIdToken();
+          localStorage.setItem("token", token);
+          navigate({ to: "/about" });
+        }
+      );
     },
     defaultValues: {
       email: "",

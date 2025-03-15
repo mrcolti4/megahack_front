@@ -1,16 +1,15 @@
-import { ReactNode, useContext, useEffect } from "react";
-import { AuthContext } from "./AuthContext";
+import { ReactNode, useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 
 export default function ProtectedRoute({ children }: { children: ReactNode }) {
-  const { user } = useContext(AuthContext)!;
+  const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!user) {
+    if (null === token) {
       navigate({ to: "/auth/login" });
     }
-  }, [user, navigate]);
+  }, [token, navigate]);
 
   return <>{children}</>;
 }

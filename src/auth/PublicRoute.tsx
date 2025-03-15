@@ -1,16 +1,15 @@
-import { ReactNode, useContext, useEffect } from "react";
-import { AuthContext } from "./AuthContext";
+import { ReactNode, useEffect } from "react";
 import { useNavigate } from "@tanstack/react-router";
 
 export default function PublicRoute({ children }: { children: ReactNode }) {
-  const { user } = useContext(AuthContext)!;
+  const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) {
+    if (token) {
       navigate({ to: "/" });
     }
-  }, [user, navigate]);
+  }, [token, navigate]);
 
   return <>{children}</>;
 }

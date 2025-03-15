@@ -18,7 +18,12 @@ function Register() {
 
   const form = useForm({
     onSubmit: (values) => {
-      register(values.value.email, values.value.password);
+      register(values.value.email, values.value.password).then(
+        async (userCreds) => {
+          const token = await userCreds.user.getIdToken();
+          localStorage.setItem("token", token);
+        }
+      );
     },
     defaultValues: {
       firstName: "",
