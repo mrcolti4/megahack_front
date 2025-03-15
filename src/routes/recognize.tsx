@@ -1,26 +1,20 @@
+import { AuthContext } from "@/auth/AuthContext";
 import ProtectedRoute from "@/auth/ProtectedRoute";
+import ActionButton from "@/components/ActionButton";
+import { useCreateDisposeRecord } from "@/services/db/queries";
 import { useRecognizeWaste } from "@/services/waste/queries";
 import { useForm } from "@tanstack/react-form";
 import { createFileRoute } from "@tanstack/react-router";
-import { create } from "zustand";
-
-type FileStoreState = {
-  result: [];
-  setResult: (result: []) => void;
-};
-
-const useFileStore = create<FileStoreState>()((set) => ({
-  result: [],
-  setResult: (result: []) => set({ result }),
-}));
+import { useContext } from "react";
 
 export const Route = createFileRoute("/recognize")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
-  const { setResult } = useFileStore();
+  const { user } = useContext(AuthContext)!;
   const recognizeWaste = useRecognizeWaste();
+  const createDisposeRecord = useCreateDisposeRecord();
 
   const form = useForm({
     onSubmit: async () => {
@@ -33,6 +27,18 @@ function RouteComponent() {
       image: null as File | null,
     },
   });
+
+  const handleCreateDisposeRecord = () => {
+    if (!user?.uid) {
+      return;
+    }
+    if (recognizeWaste.data) {
+      createDisposeRecord.mutate({
+        user_id: user?.uid,
+        labels: recognizeWaste.data.labels,
+      });
+    }
+  };
 
   return (
     <ProtectedRoute>
@@ -61,14 +67,20 @@ function RouteComponent() {
               );
             }}
           />
-          <button className="mt-4 px-4 py-2 bg-blue-600 text-white rounded">
-            Upload
-          </button>
+          <ActionButton disabled={recognizeWaste.isPending}>
+            {recognizeWaste.isPending ? "Uploading..." : "Upload"}
+          </ActionButton>
         </form>
         {recognizeWaste.isSuccess && (
           <div className="mt-4">
             <h2 className="text-lg font-bold">Result</h2>
             <pre>{JSON.stringify(recognizeWaste.data, null, 2)}</pre>
+            <ActionButton
+              onClick={handleCreateDisposeRecord}
+              disabled={createDisposeRecord.isPending}
+            >
+              {createDisposeRecord.isPending ? "Creating..." : "Create record"}
+            </ActionButton>
           </div>
         )}
         {recognizeWaste.isError && (

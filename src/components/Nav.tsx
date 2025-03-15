@@ -33,6 +33,9 @@ export default function Nav() {
               <NavLink to="/recognize">Recognize trash</NavLink>
             </li>
             <li>
+              <NavLink to="/history">Dispose history</NavLink>
+            </li>
+            <li>
               <Button className="cursor-pointer" onClick={handleLogout}>
                 Logout
               </Button>
