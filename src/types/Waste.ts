@@ -1,6 +1,8 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface DisposeRecord {
     user_id: string;
-    created_at: Date | string | number;
+    created_at: Timestamp;
     labels: LabelObject[];
 }
 export interface CreateDisposeRecord extends WasteResponse {
