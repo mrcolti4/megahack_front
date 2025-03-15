@@ -35,32 +35,58 @@ function Login() {
             </p>
           </div>
           <div className="space-y-6">
-            <div className="overflow-hidden rounded-lg border bg-white shadow-md">
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                form.handleSubmit();
+              }}
+              className="overflow-hidden rounded-lg border bg-white shadow-md"
+            >
               <div className="h-2 bg-gradient-to-r from-pink-400 via-purple-500 to-green-500"></div>
               <div className="space-y-4 p-6">
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-gray-700">
-                    Email
-                  </Label>
-                  <Input
-                    id="email"
-                    placeholder="m@example.com"
-                    required
-                    type="email"
-                    className="border-gray-200 focus:border-pink-400 focus:ring-pink-400"
+                  <form.Field
+                    name="email"
+                    children={(field) => (
+                      <>
+                        <Label htmlFor="email" className="text-gray-700">
+                          Email
+                        </Label>
+                        <Input
+                          id="email"
+                          placeholder="m@example.com"
+                          required
+                          type="email"
+                          value={field.state.value}
+                          onBlur={field.handleBlur}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          className="border-gray-200 focus:border-pink-400 focus:ring-pink-400"
+                        />
+                      </>
+                    )}
                   />
                 </div>
                 <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <Label htmlFor="password" className="text-gray-700">
-                      Password
-                    </Label>
-                  </div>
-                  <Input
-                    id="password"
-                    required
-                    type="password"
-                    className="border-gray-200 focus:border-pink-400 focus:ring-pink-400"
+                  <form.Field
+                    name="password"
+                    children={(field) => (
+                      <>
+                        <div className="flex items-center justify-between">
+                          <Label htmlFor="password" className="text-gray-700">
+                            Password
+                          </Label>
+                        </div>
+                        <Input
+                          id="password"
+                          required
+                          type="password"
+                          value={field.state.value}
+                          onBlur={field.handleBlur}
+                          onChange={(e) => field.handleChange(e.target.value)}
+                          className="border-gray-200 focus:border-pink-400 focus:ring-pink-400"
+                        />
+                      </>
+                    )}
                   />
                 </div>
                 <Button
@@ -70,7 +96,7 @@ function Login() {
                   Sign in
                 </Button>
               </div>
-            </div>
+            </form>
             <div className="text-center text-sm">
               Don't have an account?{" "}
               <Link
