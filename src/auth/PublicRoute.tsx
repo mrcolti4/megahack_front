@@ -7,7 +7,7 @@ export default function PublicRoute({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (token) {
-      navigate({ to: "/" });
+      navigate({ to: "/history" });
     }
   }, [token, navigate]);
 

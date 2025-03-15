@@ -174,7 +174,7 @@ function Register() {
                     />
                   </div>
                   <Button
-                    className="w-full bg-purple-500 hover:bg-purple-600 text-white"
+                    className="transition active:bg-purple-700 cursor-pointer w-full bg-purple-500 hover:bg-purple-600 text-white"
                     type="submit"
                   >
                     Create account
@@ -182,7 +182,7 @@ function Register() {
                 </div>
               </div>
               <div className="text-center text-sm">
-                Already have an account?{" "}
+                Already have an account?
                 <Link
                   className="font-medium text-pink-400 hover:text-pink-500"
                   to="/auth/login"

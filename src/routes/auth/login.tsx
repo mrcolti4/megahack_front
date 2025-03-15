@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useForm } from "@tanstack/react-form";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 
 export const Route = createFileRoute("/auth/login")({
   component: Login,
@@ -13,16 +13,19 @@ export const Route = createFileRoute("/auth/login")({
 
 function Login() {
   const navigate = useNavigate();
+  const [error, setError] = useState<string>("");
   const { login } = useContext(AuthContext)!;
   const form = useForm({
     onSubmit: (values) => {
-      login(values.value.email, values.value.password).then(
-        async (userCreds) => {
+      login(values.value.email, values.value.password)
+        .then(async (userCreds) => {
           const token = await userCreds.user.getIdToken();
           localStorage.setItem("token", token);
           navigate({ to: "/recognize" });
-        }
-      );
+        })
+        .catch((error) => {
+          setError(error.message);
+        });
     },
     defaultValues: {
       email: "",
@@ -71,8 +74,9 @@ function Login() {
                             type="email"
                             value={field.state.value}
                             onBlur={field.handleBlur}
+                            data-error={error ? true : false}
                             onChange={(e) => field.handleChange(e.target.value)}
-                            className="border-gray-200 focus:border-pink-400 focus:ring-pink-400"
+                            className="border-gray-200 focus:border-pink-400 focus:ring-pink-400 data-[error=true]:border-red-400 data-[error=true]:focus:border-red-400"
                           />
                         </>
                       )}
@@ -94,25 +98,31 @@ function Login() {
                             type="password"
                             value={field.state.value}
                             onBlur={field.handleBlur}
+                            data-error={error ? true : false}
                             onChange={(e) => field.handleChange(e.target.value)}
-                            className="border-gray-200 focus:border-pink-400 focus:ring-pink-400"
+                            className="border-gray-200 focus:border-pink-400 focus:ring-pink-400 data-[error=true]:border-red-400 data-[error=true]:focus:border-red-400"
                           />
                         </>
                       )}
                     />
                   </div>
                   <Button
-                    className="w-full bg-pink-400 hover:bg-pink-500 text-white"
+                    className="transition active:bg-pink-600 w-full cursor-pointer bg-pink-400 hover:bg-pink-500 text-white"
                     type="submit"
                   >
                     Sign in
                   </Button>
                 </div>
+                {error && (
+                  <p className="text-red-500 text-sm p-2 text-center">
+                    {error}
+                  </p>
+                )}
               </form>
               <div className="text-center text-sm">
                 Don't have an account?{" "}
                 <Link
-                  className="font-medium text-purple-500 hover:text-purple-600"
+                  className="transition font-medium text-purple-500 hover:text-purple-600"
                   to="/auth/register"
                 >
                   Sign up

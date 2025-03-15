@@ -2,13 +2,16 @@ import { AuthContext } from "@/auth/AuthContext";
 import { useContext } from "react";
 import NavLink from "./NavLink";
 import { Button } from "./ui/button";
+import { useNavigate } from "@tanstack/react-router";
 
 export default function Nav() {
   const { user, logOut } = useContext(AuthContext)!;
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     logOut().then(() => {
       localStorage.removeItem("token");
+      navigate({ to: "/auth/login" });
     });
   };
 
