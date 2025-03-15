@@ -30,7 +30,7 @@ export default function Nav() {
         ) : (
           <>
             <li>
-              <NavLink to="/about">About</NavLink>
+              <NavLink to="/recognize">Recognize trash</NavLink>
             </li>
             <li>
               <Button className="cursor-pointer" onClick={handleLogout}>

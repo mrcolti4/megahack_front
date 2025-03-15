@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { auth } from "@/firebase/config";
 import { Label } from "@radix-ui/react-label";
 import { useForm } from "@tanstack/react-form";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { onAuthStateChanged, updateProfile } from "firebase/auth";
 import { useContext } from "react";
 
@@ -14,6 +14,7 @@ export const Route = createFileRoute("/auth/register")({
 });
 
 function Register() {
+  const navigate = useNavigate();
   const { register } = useContext(AuthContext)!;
 
   const form = useForm({
@@ -22,6 +23,7 @@ function Register() {
         async (userCreds) => {
           const token = await userCreds.user.getIdToken();
           localStorage.setItem("token", token);
+          navigate({ to: "/recognize" });
         }
       );
     },

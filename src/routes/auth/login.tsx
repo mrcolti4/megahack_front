@@ -20,7 +20,7 @@ function Login() {
         async (userCreds) => {
           const token = await userCreds.user.getIdToken();
           localStorage.setItem("token", token);
-          navigate({ to: "/about" });
+          navigate({ to: "/recognize" });
         }
       );
     },
